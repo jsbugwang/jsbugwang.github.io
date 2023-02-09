@@ -1,4 +1,6 @@
-## 一个没啥用的奇怪的  Git 技能 —— 给你的 Commit 加上 Verified 已认证
+---
+title: 一个没啥用的奇怪的 Git 技能 —— 给你的 Commit 加上 Verified 已认证
+---
 
 ## 问题
 
