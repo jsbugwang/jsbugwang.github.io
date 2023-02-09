@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="一个没啥用的奇怪的  Git 技能 —— 给你的 Commit 加上 Verified 已认证问题先来看一张图，这是怎么回事呢？  这图不是 P 的，不信点击 Github 进去看看。原理如下代码和注释说明： 1234567$ git clone git@github.com:jsbugwang&#x2F;cloudflare-workers-short-url.git &amp;&amp; cd clou">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/02/09/Sign-commits-with-GPG/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一个没啥用的奇怪的  Git 技能 —— 给你的 Commit 加上 Verified 已认证问题先来看一张图，这是怎么回事呢？  这图不是 P 的，不信点击 Github 进去看看。原理如下代码和注释说明： 1234567$ git clone git@github.com:jsbugwang&#x2F;cloudflare-workers-short-url.git &amp;&amp; cd clou">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/git-verified-fake.jpeg">
+<meta property="og:image" content="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/verified.png">
+<meta property="og:image" content="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/compare.jpg">
+<meta property="article:published_time" content="2023-02-09T07:23:12.819Z">
+<meta property="article:modified_time" content="2023-02-09T07:23:12.819Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/git-verified-fake.jpeg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Sign-commits-with-GPG" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/02/09/Sign-commits-with-GPG/" class="article-date">
+  <time class="dt-published" datetime="2023-02-09T07:23:12.819Z" itemprop="datePublished">2023-02-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="一个没啥用的奇怪的-Git-技能-——-给你的-Commit-加上-Verified-已认证"><a href="#一个没啥用的奇怪的-Git-技能-——-给你的-Commit-加上-Verified-已认证" class="headerlink" title="一个没啥用的奇怪的  Git 技能 —— 给你的 Commit 加上 Verified 已认证"></a>一个没啥用的奇怪的  Git 技能 —— 给你的 Commit 加上 Verified 已认证</h2><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>先来看一张图，这是怎么回事呢？</p>
+<p><img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/git-verified-fake.jpeg"></p>
+<p>这图不是 P 的，不信点击 <a target="_blank" rel="noopener" href="https://github.com/jsbugwang/cloudflare-workers-short-url">Github</a> 进去看看。原理如下代码和注释说明：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@github.com:jsbugwang/cloudflare-workers-short-url.git &amp;&amp; <span class="built_in">cd</span> cloudflare-workers-short-url</span><br><span class="line">$ git config user.name <span class="string">&quot;Linus Torvalds&quot;</span> <span class="comment"># 名称在 git log 起作用，在 Github/Gitlab 如果能用  email 关联上账号则不起作用</span></span><br><span class="line">$ git config user.email torvalds@linux-foundation.org <span class="comment"># 核心是这个可以随便填写</span></span><br><span class="line">$ <span class="built_in">echo</span> -e <span class="string">&quot;\nTest&quot;</span> &gt;&gt; README.md</span><br><span class="line">$ git add README.md</span><br><span class="line">$ git comit -m <span class="string">&quot;真·Linus本人提交&quot;</span></span><br><span class="line">$ git push </span><br></pre></td></tr></table></figure>
+
+<h2 id="如何解决呢"><a href="#如何解决呢" class="headerlink" title="如何解决呢"></a>如何解决呢</h2><p>答案是 Github&#x2F;Gitlab 都支持给提交签名认证的功能。官网非常完善：<a target="_blank" rel="noopener" href="https://docs.gitlab.com/ee/user/project/repository/gpg_signed_commits/">Sign commits with GPG</a> 。下面是我的操作步骤，和官网一样的，我的多了一些有点用的 ⚠️ 注意事项和最后效果对比图。</p>
+<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><h4 id="1-Create-a-GPG-key-（生成-GPG-key）"><a href="#1-Create-a-GPG-key-（生成-GPG-key）" class="headerlink" title="1. Create a GPG key （生成 GPG key）"></a>1. Create a GPG key （生成 GPG key）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gpg --full-gen-key</span><br></pre></td></tr></table></figure>
+
+<p>输入姓名（Real name）、email，操作系统弹框提示输入 passphrase ，完成。</p>
+<blockquote>
+<p>⚠️：<strong>passphrase</strong> 务必记住，首次 commit 时会弹框输入。</p>
+</blockquote>
+<blockquote>
+<p>⚠️：email 必须和 Github&#x2F;Gitlab 账号一致。 否则显示 <code>Unverified: No user is associated with the committer email.</code> 如图：<br>![](<a target="_blank" rel="noopener" href="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/No-user-is">https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/No-user-is</a> associated.png)</p>
+</blockquote>
+<h4 id="2-Add-a-GPG-key-to-your-account-（给-Github-x2F-Gitlab-账号添加-GPG-key）"><a href="#2-Add-a-GPG-key-to-your-account-（给-Github-x2F-Gitlab-账号添加-GPG-key）" class="headerlink" title="2. Add a GPG key to your account （给 Github&#x2F;Gitlab 账号添加 GPG key）"></a>2. Add a GPG key to your account （给 Github&#x2F;Gitlab 账号添加 GPG key）</h4><p>获取公钥：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gpg --list-secret-keys --keyid-format LONG &lt;EMAIL&gt; <span class="comment"># 查看到第一行 sec  rsa3072/ 后面的 16 位就是 key ID</span></span><br><span class="line">$ gpg --armor --<span class="built_in">export</span> &lt;ID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>把得到的公钥添加到 <code>settings → GPG Keys</code> </p>
+<blockquote>
+<p>⚠️：注意，添加到 Github&#x2F;Gitlab 后检查下，应该显示绿色的 Verified ，说明 GPG key 的 email 和 Github&#x2F;Gitlab 账号匹配上了！</p>
+</blockquote>
+<h4 id="3-Associate-your-GPG-key-with-Git-（给本地-Git-关联-GPG-key）"><a href="#3-Associate-your-GPG-key-with-Git-（给本地-Git-关联-GPG-key）" class="headerlink" title="3. Associate your GPG key with Git （给本地 Git 关联 GPG key）"></a>3. Associate your GPG key with Git （给本地 Git 关联 GPG key）</h4><p>设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.signingkey &lt;ID&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>⚠️：注意，如果你只有一个 Git 账号，可以 cofig –global 。我因为有多个，所以在项目中设置。</p>
+</blockquote>
+<h4 id="4-Sign-your-Git-commits-（用-GPG-key-提交代码）"><a href="#4-Sign-your-Git-commits-（用-GPG-key-提交代码）" class="headerlink" title="4. Sign your Git commits （用 GPG key 提交代码）"></a>4. Sign your Git commits （用 GPG key 提交代码）</h4><p>有 2 种方式：</p>
+<ol>
+<li><code>git commit -S -m &quot;My commit message&quot;</code> 单次提交</li>
+<li><code>git config --global commit.gpgsign true</code> 每次提交</li>
+</ol>
+<p>最后验收如图：<br><img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/verified.png"></p>
+<p>冒充不了啦，点击<a target="_blank" rel="noopener" href="https://github.com/jsbugwang/cloudflare-workers-short-url/commits/main">这里看</a>。</p>
+<p><img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lm-pa/ljhwZthlaukjlkulzlp/static/img/compare.jpg"></p>
+<h2 id="Further-Reading"><a href="#Further-Reading" class="headerlink" title="Further Reading"></a>Further Reading</h2><p>什么是 GPG 呢？参考 <a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/07/gpg.html">GPG入门教程 - 阮一峰</a></p>
+<blockquote>
+<p>1991年，程序员Phil Zimmermann为了避开政府监视，开发了加密软件PGP。这个软件非常好用，迅速流传开来，成了许多程序员的必备工具。但是，它是商业软件，不能自由使用。所以，自由软件基金会决定，开发一个PGP的替代品，取名为GnuPG。这就是GPG的由来。</p>
+</blockquote>
+<p>简单说就是<strong>加密软件</strong>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/02/09/Sign-commits-with-GPG/" data-id="cldws0fl90000whmtfslf7mus" data-title="" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/02/09/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">February 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/02/09/Sign-commits-with-GPG/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/02/09/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/01/k8s-quick-start/">K8S Hello World 分步教程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
