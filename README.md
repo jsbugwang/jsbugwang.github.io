@@ -5,7 +5,13 @@
 ## 开发
 
 ```bash
-hexo s
+$ hexo s
+```
+
+### 使用 theme
+
+```bash
+$ git subtree add --prefix=themes/hexo-theme-next git@github.com:next-theme/hexo-theme-next.git master --squash
 ```
 
 ## 部署：在 GitHub Pages 上部署 Hexo
