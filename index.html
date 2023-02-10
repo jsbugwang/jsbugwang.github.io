@@ -171,7 +171,7 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2023-02-10 06:55:34" itemprop="dateCreated datePublished" datetime="2023-02-10T06:55:34+00:00">2023-02-10</time>
+      <time title="Created: 2023-02-10 07:00:23" itemprop="dateCreated datePublished" datetime="2023-02-10T07:00:23+00:00">2023-02-10</time>
     </span>
 
   
@@ -250,7 +250,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tife.fun/2023/02/10/hello-world/">
+    <link itemprop="mainEntityOfPage" href="https://tife.fun/2023/02/10/grep-no-such-file-or-directory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -268,7 +268,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/10/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+          <a href="/2023/02/10/grep-no-such-file-or-directory/" class="post-title-link" itemprop="url">grep 空格导致的 No such file or directory</a>
         </h2>
 
         <div class="post-meta-container">
@@ -279,7 +279,7 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2023-02-10 06:55:34" itemprop="dateCreated datePublished" datetime="2023-02-10T06:55:34+00:00">2023-02-10</time>
+      <time title="Created: 2023-02-10 07:00:23" itemprop="dateCreated datePublished" datetime="2023-02-10T07:00:23+00:00">2023-02-10</time>
     </span>
 
   
@@ -292,19 +292,20 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+          <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ tree</span><br><span class="line">.</span><br><span class="line">└── te\ st</span><br><span class="line">    └── a.txt</span><br><span class="line"></span><br><span class="line">1 directory, 1 file</span><br><span class="line"></span><br><span class="line">$ find . -<span class="built_in">type</span> f | xargs grep <span class="string">&quot;koala&quot;</span></span><br><span class="line">grep: ./te: No such file or directory</span><br><span class="line">grep: st/a.txt: No such file or directory</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>就是因为文件或目录包含空白符</p>
+<h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ man find</span><br><span class="line">     -print0</span><br><span class="line">             This primary always evaluates to <span class="literal">true</span>.  It prints the pathname of the current file to standard output, followed by an ASCII NUL</span><br><span class="line">             character (character code 0).</span><br><span class="line"></span><br><span class="line">     -X      Permit find to be safely used <span class="keyword">in</span> conjunction with xargs(1).  If a file name contains any of the delimiting characters used by</span><br><span class="line">             xargs(1), a diagnostic message is displayed on standard error, and the file is skipped.  The delimiting characters include single</span><br><span class="line">             (`` <span class="string">&#x27; &#x27;</span><span class="string">&#x27;) and double (`` &quot; &#x27;</span><span class="string">&#x27;) quotes, backslash (``\&#x27;</span><span class="string">&#x27;), space, tab and newline characters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">             However, you may wish to consider the -print0 primary in conjunction with ``xargs -0&#x27;</span><span class="string">&#x27; as an effective alternative.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$ man xargs </span></span><br><span class="line"><span class="string">     -0      Change xargs to expect NUL (``\0&#x27;</span><span class="string">&#x27;) characters as separators, instead of spaces and newlines.  This is expected to be used in</span></span><br><span class="line"><span class="string">             concert with the -print0 function in find(1).</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ find . -type f -print0 | xargs -0 grep --color -In &quot;koala&quot;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p><em>Linux</em> 的 <em>find</em> 命令支持 <em>-printf</em> 参数，而 <em>MAC</em> 因为是继承自 <em>FreeBSD</em> ，所以没有此参数，如果只考虑 <em>Linux</em> ，可用命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find -path &quot;*/.svn&quot; -prune -o -printf &quot;\&quot;%p\&quot;\n&quot; | xargs grep --color -In &quot;engine-ie-button&quot;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><p><em>find</em> 命令还支持正则表达式，例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-regex <span class="string">&quot;.*.\(css\|js\|html\)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/752818/find-lacks-the-option-printf-now-what">find lacks the option -printf, now what?</a><br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/44217298/why-does-grep-print-out-no-such-file-or-directory">Why does grep print out “No such file or directory”?</a></p>
 
       
     </div>
@@ -360,7 +361,7 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2023-02-10 06:55:34" itemprop="dateCreated datePublished" datetime="2023-02-10T06:55:34+00:00">2023-02-10</time>
+      <time title="Created: 2023-02-10 07:00:23" itemprop="dateCreated datePublished" datetime="2023-02-10T07:00:23+00:00">2023-02-10</time>
     </span>
 
   

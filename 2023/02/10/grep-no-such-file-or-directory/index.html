@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tife.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="现象12345678910$ tree.└── te\ st    └── a.txt1 directory, 1 file$ find . -type f | xargs grep &quot;koala&quot;grep: .&#x2F;te: No such file or directorygrep: st&#x2F;a.txt: No such file or directory  原因就是因为文件或目录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="grep 空格导致的 No such file or directory">
+<meta property="og:url" content="https://tife.fun/2023/02/10/grep-no-such-file-or-directory/index.html">
+<meta property="og:site_name" content="Bug王的博客">
+<meta property="og:description" content="现象12345678910$ tree.└── te\ st    └── a.txt1 directory, 1 file$ find . -type f | xargs grep &quot;koala&quot;grep: .&#x2F;te: No such file or directorygrep: st&#x2F;a.txt: No such file or directory  原因就是因为文件或目录">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-02-10T07:00:23.435Z">
+<meta property="article:modified_time" content="2023-02-10T07:00:23.435Z">
+<meta property="article:author" content="Bugwang">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tife.fun/2023/02/10/grep-no-such-file-or-directory/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh","comments":true,"permalink":"https://tife.fun/2023/02/10/grep-no-such-file-or-directory/","path":"2023/02/10/grep-no-such-file-or-directory/","title":"grep 空格导致的 No such file or directory"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>grep 空格导致的 No such file or directory | Bug王的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Bug王的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">前端</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%A1%A3"><span class="nav-number">3.</span> <span class="nav-text">文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E6%B3%A8"><span class="nav-number">5.</span> <span class="nav-text">备注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">6.</span> <span class="nav-text">小技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Bugwang</p>
+  <div class="site-description" itemprop="description">前端杂记</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://tife.fun/2023/02/10/grep-no-such-file-or-directory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Bugwang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bug王的博客">
+      <meta itemprop="description" content="前端杂记">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="grep 空格导致的 No such file or directory | Bug王的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          grep 空格导致的 No such file or directory
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-02-10 07:00:23" itemprop="dateCreated datePublished" datetime="2023-02-10T07:00:23+00:00">2023-02-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ tree</span><br><span class="line">.</span><br><span class="line">└── te\ st</span><br><span class="line">    └── a.txt</span><br><span class="line"></span><br><span class="line">1 directory, 1 file</span><br><span class="line"></span><br><span class="line">$ find . -<span class="built_in">type</span> f | xargs grep <span class="string">&quot;koala&quot;</span></span><br><span class="line">grep: ./te: No such file or directory</span><br><span class="line">grep: st/a.txt: No such file or directory</span><br></pre></td></tr></table></figure>
+
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>就是因为文件或目录包含空白符</p>
+<h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ man find</span><br><span class="line">     -print0</span><br><span class="line">             This primary always evaluates to <span class="literal">true</span>.  It prints the pathname of the current file to standard output, followed by an ASCII NUL</span><br><span class="line">             character (character code 0).</span><br><span class="line"></span><br><span class="line">     -X      Permit find to be safely used <span class="keyword">in</span> conjunction with xargs(1).  If a file name contains any of the delimiting characters used by</span><br><span class="line">             xargs(1), a diagnostic message is displayed on standard error, and the file is skipped.  The delimiting characters include single</span><br><span class="line">             (`` <span class="string">&#x27; &#x27;</span><span class="string">&#x27;) and double (`` &quot; &#x27;</span><span class="string">&#x27;) quotes, backslash (``\&#x27;</span><span class="string">&#x27;), space, tab and newline characters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">             However, you may wish to consider the -print0 primary in conjunction with ``xargs -0&#x27;</span><span class="string">&#x27; as an effective alternative.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$ man xargs </span></span><br><span class="line"><span class="string">     -0      Change xargs to expect NUL (``\0&#x27;</span><span class="string">&#x27;) characters as separators, instead of spaces and newlines.  This is expected to be used in</span></span><br><span class="line"><span class="string">             concert with the -print0 function in find(1).</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ find . -type f -print0 | xargs -0 grep --color -In &quot;koala&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p><em>Linux</em> 的 <em>find</em> 命令支持 <em>-printf</em> 参数，而 <em>MAC</em> 因为是继承自 <em>FreeBSD</em> ，所以没有此参数，如果只考虑 <em>Linux</em> ，可用命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find -path &quot;*/.svn&quot; -prune -o -printf &quot;\&quot;%p\&quot;\n&quot; | xargs grep --color -In &quot;engine-ie-button&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><p><em>find</em> 命令还支持正则表达式，例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-regex <span class="string">&quot;.*.\(css\|js\|html\)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/752818/find-lacks-the-option-printf-now-what">find lacks the option -printf, now what?</a><br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/44217298/why-does-grep-print-out-no-such-file-or-directory">Why does grep print out “No such file or directory”?</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/10/openssh-no-mutual-signature-algorithm/" rel="prev" title="关于 SSH send_pubkey_test no mutual signature algorithm 报错">
+                  <i class="fa fa-chevron-left"></i> 关于 SSH send_pubkey_test no mutual signature algorithm 报错
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/10/Sign-commits-with-GPG/" rel="next" title="一个没啥用的奇怪的 Git 技能 —— 给你的 Commit 加上 Verified 已认证">
+                  一个没啥用的奇怪的 Git 技能 —— 给你的 Commit 加上 Verified 已认证 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bugwang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
