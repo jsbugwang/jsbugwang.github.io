@@ -1,5 +1,5 @@
 ---
-title: 关于 `SSH send_pubkey_test: no mutual signature algorithm` 报错
+title: 关于 SSH send_pubkey_test: no mutual signature algorithm 报错
 ---
 
 ## 背景
